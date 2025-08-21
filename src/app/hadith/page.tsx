@@ -24,6 +24,8 @@ export default function HadithPage() {
   const [paginate, setPaginate] = useState<number>(50);
   const [q, setQ] = useState<string>("");
   const [items, setItems] = useState<NormalizedHadith[]>([]);
+  const [page, setPage] = useState<number>(1);
+  const [total, setTotal] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
 
@@ -37,6 +39,7 @@ export default function HadithPage() {
           searchParams.set("hadithArabic", q);
           searchParams.set("hadithEnglish", q);
         }
+        searchParams.set("page", String(page));
         const res = await fetch(`/api/hadith?${searchParams.toString()}`);
         const data = await res.json();
         const list: unknown = data?.data?.hadiths || data?.data?.hadith || data?.hadiths || [];
@@ -49,6 +52,8 @@ export default function HadithPage() {
           source: BOOKS.find((b) => b.value === book)?.label || book,
         }));
         setItems(normalized);
+        const metaTotal = Number(data?.data?.total || data?.total || normalized.length);
+        setTotal(Number.isFinite(metaTotal) ? metaTotal : normalized.length);
       } catch {
         setError("Failed to load hadith. Try again later.");
       } finally {
@@ -56,7 +61,7 @@ export default function HadithPage() {
       }
     }
     load();
-  }, [book, paginate, q]);
+  }, [book, paginate, q, page]);
 
   const results = useMemo(() => {
     const t = q.trim().toLowerCase();
@@ -110,6 +115,12 @@ export default function HadithPage() {
           <li className="text-sm text-black/60">No results in this range.</li>
         )}
       </ul>
+
+      <div className="mt-4 flex items-center gap-3">
+        <button disabled={page <= 1 || loading} onClick={() => setPage((p) => Math.max(1, p - 1))} className="rounded border border-black/20 px-3 py-2 disabled:opacity-50">Prev</button>
+        <span className="text-sm text-black/60">Page {page}</span>
+        <button disabled={loading || items.length < paginate} onClick={() => setPage((p) => p + 1)} className="rounded border border-black/20 px-3 py-2 disabled:opacity-50">Next</button>
+      </div>
     </section>
   );
 }
