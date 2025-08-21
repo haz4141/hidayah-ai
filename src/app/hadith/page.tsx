@@ -11,18 +11,17 @@ type NormalizedHadith = {
 };
 
 const BOOKS = [
-  { value: "bukhari", label: "Bukhari" },
-  { value: "muslim", label: "Muslim" },
-  { value: "tirmidzi", label: "Tirmidhi" },
-  { value: "nasai", label: "Nasa'i" },
-  { value: "abudawud", label: "Abu Dawud" },
-  { value: "ibnumajah", label: "Ibn Majah" },
-  { value: "ahmad", label: "Ahmad" },
+  { value: "sahih-bukhari", label: "Sahih Bukhari" },
+  { value: "sahih-muslim", label: "Sahih Muslim" },
+  { value: "jami-at-tirmidhi", label: "Jami' at-Tirmidhi" },
+  { value: "sunan-an-nasai", label: "Sunan an-Nasa'i" },
+  { value: "sunan-abu-dawood", label: "Sunan Abu Dawud" },
+  { value: "sunan-ibn-e-majah", label: "Sunan Ibn Majah" },
 ];
 
 export default function HadithPage() {
   const [book, setBook] = useState<string>(BOOKS[0].value);
-  const [range, setRange] = useState<string>("1-50");
+  const [paginate, setPaginate] = useState<number>(50);
   const [q, setQ] = useState<string>("");
   const [items, setItems] = useState<NormalizedHadith[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -33,7 +32,12 @@ export default function HadithPage() {
       setLoading(true);
       setError("");
       try {
-        const res = await fetch(`/api/hadith?book=${encodeURIComponent(book)}&range=${encodeURIComponent(range)}`);
+        const searchParams = new URLSearchParams({ book, paginate: String(paginate) });
+        if (q.trim()) {
+          searchParams.set("hadithArabic", q);
+          searchParams.set("hadithEnglish", q);
+        }
+        const res = await fetch(`/api/hadith?${searchParams.toString()}`);
         const data = await res.json();
         const list: unknown = data?.data?.hadiths || data?.data?.hadith || data?.hadiths || [];
         const array = Array.isArray(list) ? list : [];
@@ -52,7 +56,7 @@ export default function HadithPage() {
       }
     }
     load();
-  }, [book, range]);
+  }, [book, paginate, q]);
 
   const results = useMemo(() => {
     const t = q.trim().toLowerCase();
@@ -73,7 +77,7 @@ export default function HadithPage() {
             <option key={b.value} value={b.value}>{b.label}</option>
           ))}
         </select>
-        <input value={range} onChange={(e) => setRange(e.target.value)} className="rounded border border-black/20 px-3 py-2" placeholder="Range e.g. 1-50" />
+        <input type="number" min={10} max={200} step={10} value={paginate} onChange={(e) => setPaginate(Number(e.target.value))} className="rounded border border-black/20 px-3 py-2" placeholder="Per page" />
         <div className="md:col-span-2">
           <input
             value={q}
