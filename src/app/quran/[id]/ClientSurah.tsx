@@ -2,13 +2,23 @@
 
 import { appendToList, safeGet, safeSet } from "@/lib/storage";
 import { useEffect, useState } from "react";
+import AudioPlayer from "@/components/AudioPlayer";
 
 type Verse = { numberInSurah: number; text: string; translation: string };
 type SurahData = { id: number; name: string; englishName: string; verses: Verse[] };
 
+const RECITERS = [
+  { id: "mishari_rashid_alafasy", name: "Mishari Rashid Alafasy" },
+  { id: "abdul_rahman_al_sudais", name: "Abdul Rahman Al-Sudais" },
+  { id: "saad_al_ghamdi", name: "Saad Al-Ghamdi" },
+  { id: "muhammad_siddiq_al_minshawi", name: "Muhammad Siddiq Al-Minshawi" },
+];
+
 export default function ClientSurah({ chapterId }: { chapterId: number }) {
   const [surah, setSurah] = useState<SurahData | null>(null);
   const [bookmarks, setBookmarks] = useState<number[]>(safeGet<number[]>(`bk_${chapterId}`, []));
+  const [selectedReciter, setSelectedReciter] = useState<string>(RECITERS[0].id);
+  const [playingAyah, setPlayingAyah] = useState<number | null>(null);
 
   useEffect(() => {
     async function load() {
@@ -48,12 +58,12 @@ export default function ClientSurah({ chapterId }: { chapterId: number }) {
     });
   }
 
-  function playAudio(ayahNum: number) {
-    const verse = surah?.verses.find((v) => v.numberInSurah === ayahNum);
-    if (!verse) return;
-    const utter = new SpeechSynthesisUtterance(verse.translation);
-    window.speechSynthesis.cancel();
-    window.speechSynthesis.speak(utter);
+  function getAudioUrl(ayahNum: number) {
+    return `https://api.alquran.cloud/v1/ayah/${chapterId}:${ayahNum}/${selectedReciter}`;
+  }
+
+  function handleAudioEnd() {
+    setPlayingAyah(null);
   }
 
   return (
@@ -61,6 +71,20 @@ export default function ClientSurah({ chapterId }: { chapterId: number }) {
       <h1 className="text-2xl font-semibold">
         {surah?.name || "…"} <span className="text-black/60 text-base">({surah?.englishName || ""})</span>
       </h1>
+      
+      <div className="mt-4 flex items-center gap-4">
+        <label className="text-sm text-black/60">Reciter:</label>
+        <select 
+          value={selectedReciter} 
+          onChange={(e) => setSelectedReciter(e.target.value)}
+          className="rounded border border-black/20 px-3 py-1 text-sm"
+        >
+          {RECITERS.map((r) => (
+            <option key={r.id} value={r.id}>{r.name}</option>
+          ))}
+        </select>
+      </div>
+
       <div className="mt-6 space-y-3">
         {surah?.verses.map((v) => (
           <div key={v.numberInSurah} className="rounded border border-black/10 p-4">
@@ -70,7 +94,11 @@ export default function ClientSurah({ chapterId }: { chapterId: number }) {
                 <p className="text-sm text-black/70 mt-1">{v.translation}</p>
               </div>
               <div className="flex flex-col gap-2 items-end">
-                <button className="text-sm text-brand" onClick={() => playAudio(v.numberInSurah)}>Play</button>
+                <AudioPlayer 
+                  src={getAudioUrl(v.numberInSurah)}
+                  onEnded={handleAudioEnd}
+                  className="w-64"
+                />
                 <button className="text-sm" onClick={() => toggleBookmark(v.numberInSurah)}>
                   {bookmarks.includes(v.numberInSurah) ? "Remove bookmark" : "Bookmark"}
                 </button>
