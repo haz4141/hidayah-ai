@@ -1,0 +1,27 @@
+{
+  "collection": "Sample",
+  "items": [
+    {
+      "id": "s1",
+      "source": "Sahih Muslim (sample)",
+      "text": "إنما الأعمال بالنيات",
+      "translation": "Actions are but by intentions.",
+      "grading": "Sahih"
+    },
+    {
+      "id": "s2",
+      "source": "Sahih Bukhari (sample)",
+      "text": "الدين النصيحة",
+      "translation": "The religion is sincere advice.",
+      "grading": "Sahih"
+    },
+    {
+      "id": "s3",
+      "source": "Tirmidhi (sample)",
+      "text": "طلب العلم فريضة على كل مسلم",
+      "translation": "Seeking knowledge is an obligation upon every Muslim.",
+      "grading": "Hasan"
+    }
+  ]
+}
+
