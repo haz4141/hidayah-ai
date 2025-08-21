@@ -1,11 +1,9 @@
-export const metadata = { title: "Profile • Hidayah AI" };
-
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
 import { safeGet, updateStreak } from "@/lib/storage";
 
-type HistoryItem = { type: string; ts: number; [k: string]: any };
+type HistoryItem = { type: string; ts: number; chapterId?: number; ayahNum?: number; q?: string };
 
 export default function ProfilePage() {
   const [streak, setStreak] = useState<number>(0);

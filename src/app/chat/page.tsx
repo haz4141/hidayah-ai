@@ -1,5 +1,3 @@
-export const metadata = { title: "AI Chatbot • Hidayah AI" };
-
 "use client";
 
 import { useRef, useState } from "react";
@@ -61,7 +59,7 @@ export default function ChatPage() {
             </div>
           </div>
         ))}
-        {messages.length === 0 && <p className="text-sm text-black/60">Ask about prayer, fasting, or search by keyword (e.g., "mercy").</p>}
+        {messages.length === 0 && <p className="text-sm text-black/60">Ask about prayer, fasting, or search by keyword (e.g., &quot;mercy&quot;).</p>}
       </div>
       <div className="mt-3 flex items-center gap-2">
         <input className="flex-1 rounded border border-black/20 px-3 py-2" value={input} onChange={(e) => setInput(e.target.value)} placeholder="Type your question" />

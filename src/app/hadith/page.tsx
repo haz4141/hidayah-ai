@@ -1,5 +1,3 @@
-export const metadata = { title: "Hadith Insights • Hidayah AI" };
-
 "use client";
 
 import data from "@/data/hadith.json";

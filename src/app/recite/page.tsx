@@ -1,27 +1,44 @@
-export const metadata = { title: "Recitation Feedback • Hidayah AI" };
-
 "use client";
 
 import { useEffect, useRef, useState } from "react";
 
-type PartialWindowWithSpeech = Window & { webkitSpeechRecognition?: any };
+type RecognitionResultItem = { transcript: string };
+type RecognitionAlternative = { 0: RecognitionResultItem };
+type RecognitionEvent = {
+  resultIndex: number;
+  results: ArrayLike<RecognitionAlternative>;
+};
+
+type RecognitionInstance = {
+  lang: string;
+  interimResults: boolean;
+  continuous: boolean;
+  start: () => void;
+  stop: () => void;
+  onresult: ((e: RecognitionEvent) => void) | null;
+  onend: (() => void) | null;
+};
+
+type SpeechRecognitionConstructor = new () => RecognitionInstance;
+
+type PartialWindowWithSpeech = Window & { webkitSpeechRecognition?: SpeechRecognitionConstructor; SpeechRecognition?: SpeechRecognitionConstructor };
 
 export default function RecitePage() {
   const [supported, setSupported] = useState(false);
   const [listening, setListening] = useState(false);
   const [transcript, setTranscript] = useState("");
-  const recRef = useRef<any>(null);
+  const recRef = useRef<RecognitionInstance | null>(null);
 
   useEffect(() => {
     const w = window as PartialWindowWithSpeech;
-    const SR = (w as any).SpeechRecognition || w.webkitSpeechRecognition;
+    const SR: SpeechRecognitionConstructor | undefined = w.SpeechRecognition || w.webkitSpeechRecognition;
     if (!SR) return;
     setSupported(true);
     const rec = new SR();
     rec.lang = "ar-SA";
     rec.interimResults = true;
     rec.continuous = true;
-    rec.onresult = (e: any) => {
+    rec.onresult = (e: RecognitionEvent) => {
       let text = "";
       for (let i = e.resultIndex; i < e.results.length; i++) {
         text += e.results[i][0].transcript;
