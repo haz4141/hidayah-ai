@@ -1,7 +1,7 @@
 "use client";
 
 import { appendToList, safeGet, safeSet } from "@/lib/storage";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 
 type Verse = { numberInSurah: number; text: string; translation: string };
 type SurahData = { id: number; name: string; englishName: string; verses: Verse[] };
@@ -19,10 +19,14 @@ export default function ClientSurah({ chapterId }: { chapterId: number }) {
       ]);
       const name = ar.data.englishName;
       const arabicName = ar.data.name;
-      const verses: Verse[] = ar.data.ayahs.map((a: any, i: number) => ({
-        numberInSurah: a.numberInSurah,
-        text: a.text,
-        translation: en.data.ayahs[i]?.text ?? "",
+      const ayahs: unknown = ar?.data?.ayahs;
+      const ayahsEn: unknown = en?.data?.ayahs;
+      const arrAr = Array.isArray(ayahs) ? ayahs : [];
+      const arrEn = Array.isArray(ayahsEn) ? ayahsEn : [];
+      const verses: Verse[] = arrAr.map((a: Record<string, unknown>, i: number) => ({
+        numberInSurah: Number(a.numberInSurah as number),
+        text: String(a.text as string),
+        translation: String((arrEn[i] as Record<string, unknown> | undefined)?.text ?? ""),
       }));
       setSurah({ id: chapterId, name: arabicName, englishName: name, verses });
     }

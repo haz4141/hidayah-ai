@@ -1,5 +1,3 @@
-export const metadata = { title: "Qur'an Reader • Hidayah AI" };
-
 "use client";
 
 import Link from "next/link";
@@ -12,7 +10,17 @@ export default function QuranPage() {
   useEffect(() => {
     fetch("https://api.alquran.cloud/v1/surah")
       .then((r) => r.json())
-      .then((d) => setChapters(d.data.map((s: any) => ({ number: s.number, name: s.name, englishName: s.englishName }))));
+      .then((d) => {
+        const list: unknown = d?.data;
+        const array = Array.isArray(list) ? list : [];
+        setChapters(
+          array.map((s: Record<string, unknown>) => ({
+            number: Number(s.number as number),
+            name: String(s.name as string),
+            englishName: String(s.englishName as string),
+          }))
+        );
+      });
   }, []);
 
   return (
