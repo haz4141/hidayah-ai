@@ -5,6 +5,8 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",
+    "export": "next build",
+    "preview:static": "npx -y serve out",
     "start": "next start",
     "lint": "eslint"
   },
