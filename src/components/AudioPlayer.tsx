@@ -5,10 +5,11 @@ import { useEffect, useRef, useState } from "react";
 type AudioPlayerProps = {
   src: string;
   onEnded?: () => void;
+  onError?: () => void;
   className?: string;
 };
 
-export default function AudioPlayer({ src, onEnded, className = "" }: AudioPlayerProps) {
+export default function AudioPlayer({ src, onEnded, onError, className = "" }: AudioPlayerProps) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -27,12 +28,17 @@ export default function AudioPlayer({ src, onEnded, className = "" }: AudioPlaye
       setIsPlaying(false);
       onEnded?.();
     };
+    const handleError = () => {
+      setIsPlaying(false);
+      onError?.();
+    };
 
     audio.addEventListener("timeupdate", updateTime);
     audio.addEventListener("loadedmetadata", updateDuration);
     audio.addEventListener("play", handlePlay);
     audio.addEventListener("pause", handlePause);
     audio.addEventListener("ended", handleEnded);
+    audio.addEventListener("error", handleError);
 
     return () => {
       audio.removeEventListener("timeupdate", updateTime);
@@ -40,8 +46,9 @@ export default function AudioPlayer({ src, onEnded, className = "" }: AudioPlaye
       audio.removeEventListener("play", handlePlay);
       audio.removeEventListener("pause", handlePause);
       audio.removeEventListener("ended", handleEnded);
+      audio.removeEventListener("error", handleError);
     };
-  }, [onEnded]);
+  }, [onEnded, onError]);
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -56,7 +63,9 @@ export default function AudioPlayer({ src, onEnded, className = "" }: AudioPlaye
     if (isPlaying) {
       audio.pause();
     } else {
-      audio.play();
+      audio.play().catch(() => {
+        onError?.();
+      });
     }
   }
 

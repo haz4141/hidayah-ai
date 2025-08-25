@@ -18,27 +18,31 @@ export default function ClientSurah({ chapterId }: { chapterId: number }) {
   const [surah, setSurah] = useState<SurahData | null>(null);
   const [bookmarks, setBookmarks] = useState<number[]>(safeGet<number[]>(`bk_${chapterId}`, []));
   const [selectedReciter, setSelectedReciter] = useState<string>(RECITERS[0].id);
-  const [playingAyah, setPlayingAyah] = useState<number | null>(null);
+  const [audioError, setAudioError] = useState<string>("");
 
   useEffect(() => {
     async function load() {
-      // AlQuran Cloud: Arabic Uthmani + Sahih Intl translation
-      const [ar, en] = await Promise.all([
-        fetch(`https://api.alquran.cloud/v1/surah/${chapterId}`).then((r) => r.json()),
-        fetch(`https://api.alquran.cloud/v1/surah/${chapterId}/en.sahih`).then((r) => r.json()),
-      ]);
-      const name = ar.data.englishName;
-      const arabicName = ar.data.name;
-      const ayahs: unknown = ar?.data?.ayahs;
-      const ayahsEn: unknown = en?.data?.ayahs;
-      const arrAr = Array.isArray(ayahs) ? ayahs : [];
-      const arrEn = Array.isArray(ayahsEn) ? ayahsEn : [];
-      const verses: Verse[] = arrAr.map((a: Record<string, unknown>, i: number) => ({
-        numberInSurah: Number(a.numberInSurah as number),
-        text: String(a.text as string),
-        translation: String((arrEn[i] as Record<string, unknown> | undefined)?.text ?? ""),
-      }));
-      setSurah({ id: chapterId, name: arabicName, englishName: name, verses });
+      try {
+        // AlQuran Cloud: Arabic Uthmani + Sahih Intl translation
+        const [ar, en] = await Promise.all([
+          fetch(`https://api.alquran.cloud/v1/surah/${chapterId}`).then((r) => r.json()),
+          fetch(`https://api.alquran.cloud/v1/surah/${chapterId}/en.sahih`).then((r) => r.json()),
+        ]);
+        const name = ar.data.englishName;
+        const arabicName = ar.data.name;
+        const ayahs: unknown = ar?.data?.ayahs;
+        const ayahsEn: unknown = en?.data?.ayahs;
+        const arrAr = Array.isArray(ayahs) ? ayahs : [];
+        const arrEn = Array.isArray(ayahsEn) ? ayahsEn : [];
+        const verses: Verse[] = arrAr.map((a: Record<string, unknown>, i: number) => ({
+          numberInSurah: Number(a.numberInSurah as number),
+          text: String(a.text as string),
+          translation: String((arrEn[i] as Record<string, unknown> | undefined)?.text ?? ""),
+        }));
+        setSurah({ id: chapterId, name: arabicName, englishName: name, verses });
+      } catch (error) {
+        console.error("Failed to load surah:", error);
+      }
     }
     load();
   }, [chapterId]);
@@ -59,11 +63,12 @@ export default function ClientSurah({ chapterId }: { chapterId: number }) {
   }
 
   function getAudioUrl(ayahNum: number) {
+    // Use the correct AlQuran Cloud audio endpoint
     return `https://api.alquran.cloud/v1/ayah/${chapterId}:${ayahNum}/${selectedReciter}`;
   }
 
-  function handleAudioEnd() {
-    setPlayingAyah(null);
+  function handleAudioError() {
+    setAudioError("Audio not available for this reciter. Try another reciter.");
   }
 
   return (
@@ -76,7 +81,10 @@ export default function ClientSurah({ chapterId }: { chapterId: number }) {
         <label className="text-sm text-black/60">Reciter:</label>
         <select 
           value={selectedReciter} 
-          onChange={(e) => setSelectedReciter(e.target.value)}
+          onChange={(e) => {
+            setSelectedReciter(e.target.value);
+            setAudioError("");
+          }}
           className="rounded border border-black/20 px-3 py-1 text-sm"
         >
           {RECITERS.map((r) => (
@@ -84,6 +92,10 @@ export default function ClientSurah({ chapterId }: { chapterId: number }) {
           ))}
         </select>
       </div>
+
+      {audioError && (
+        <div className="mt-2 text-sm text-red-600">{audioError}</div>
+      )}
 
       <div className="mt-6 space-y-3">
         {surah?.verses.map((v) => (
@@ -96,7 +108,8 @@ export default function ClientSurah({ chapterId }: { chapterId: number }) {
               <div className="flex flex-col gap-2 items-end">
                 <AudioPlayer 
                   src={getAudioUrl(v.numberInSurah)}
-                  onEnded={handleAudioEnd}
+                  onEnded={() => {}}
+                  onError={handleAudioError}
                   className="w-64"
                 />
                 <button className="text-sm" onClick={() => toggleBookmark(v.numberInSurah)}>
