@@ -8,10 +8,10 @@ type Verse = { numberInSurah: number; text: string; translation: string };
 type SurahData = { id: number; name: string; englishName: string; verses: Verse[] };
 
 const RECITERS = [
-  { id: "mishari_rashid_alafasy", name: "Mishari Rashid Alafasy" },
-  { id: "abdul_rahman_al_sudais", name: "Abdul Rahman Al-Sudais" },
-  { id: "saad_al_ghamdi", name: "Saad Al-Ghamdi" },
-  { id: "muhammad_siddiq_al_minshawi", name: "Muhammad Siddiq Al-Minshawi" },
+  { id: "mishari", name: "Mishari Rashid Alafasy", url: "https://server8.mp3quran.net/afs" },
+  { id: "sudais", name: "Abdul Rahman Al-Sudais", url: "https://server8.mp3quran.net/sds" },
+  { id: "ghamdi", name: "Saad Al-Ghamdi", url: "https://server8.mp3quran.net/s_gmd" },
+  { id: "minshawi", name: "Muhammad Siddiq Al-Minshawi", url: "https://server8.mp3quran.net/minsh" },
 ];
 
 export default function ClientSurah({ chapterId }: { chapterId: number }) {
@@ -63,8 +63,13 @@ export default function ClientSurah({ chapterId }: { chapterId: number }) {
   }
 
   function getAudioUrl(ayahNum: number) {
-    // Use the correct AlQuran Cloud audio endpoint
-    return `https://api.alquran.cloud/v1/ayah/${chapterId}:${ayahNum}/${selectedReciter}`;
+    const reciter = RECITERS.find(r => r.id === selectedReciter);
+    if (!reciter) return "";
+    
+    // Use MP3Quran.net format: {base_url}/{surah_number:ayah_number}.mp3
+    const surahStr = chapterId.toString().padStart(3, '0');
+    const ayahStr = ayahNum.toString().padStart(3, '0');
+    return `${reciter.url}/${surahStr}${ayahStr}.mp3`;
   }
 
   function handleAudioError() {
