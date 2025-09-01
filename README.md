@@ -46,9 +46,28 @@ npm run export
 # Output in `out/` can be hosted anywhere
 ```
 
-## Features (Scaffold)
-- Qur'an Reader: Uthmani script, tafsir, translations, audio, bookmarks
-- Hadith Insights: search, source verification, AI summaries
-- AI Chatbot: ask Islamic questions, find ayat/hadith (disclaimer added)
-- Recitation Feedback: AI listens & corrects tajweed & pronunciation
-- Profile: user history, streaks, bookmarks, progress
+## Features
+- **Qur'an Reader**: Uthmani script, tafsir, translations, audio, bookmarks
+- **Hadith Insights**: Search, source verification, AI summaries with local and external datasets
+- **AI Chatbot**: Ask Islamic questions, find ayat/hadith (disclaimer added)
+- **Recitation Feedback**: AI listens & corrects tajweed & pronunciation
+- **Profile**: User history, streaks, bookmarks, progress
+
+## API Configuration
+
+### HadithAPI.com Integration
+This app integrates with HadithAPI.com for external hadith data. To set up:
+
+1. **Create environment file**: Create a `.env.local` file in the root directory
+2. **Add your API key**:
+   ```
+   HADITHAPI_KEY=your_api_key_here
+   ```
+3. **Test the connection**: Visit `/api/hadith/test` to verify the API is working
+
+The app also includes a comprehensive local hadith dataset with 16 authentic hadiths from major collections.
+
+### Available Hadith Sources
+- **Local Dataset**: 16 authentic hadiths with full metadata
+- **External API**: HadithAPI.com integration for extensive search
+- **Collections**: Sahih Bukhari, Sahih Muslim, Jami' at-Tirmidhi, Sunan an-Nasa'i, Sunan Abu Dawud, Sunan Ibn Majah

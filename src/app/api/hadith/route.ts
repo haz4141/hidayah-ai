@@ -5,11 +5,8 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
   const url = new URL(req.url);
-  const key = process.env.HADITHAPI_KEY;
-  if (!key) {
-    return NextResponse.json({ error: "Missing HADITHAPI_KEY" }, { status: 500 });
-  }
-
+  const key = process.env.HADITHAPI_KEY || "$2y$10$y5YFBla7izaeIPt30Y4DOIwskTsVJywnfodQk0QZm61J9aiISu";
+  
   const params = new URLSearchParams(url.searchParams);
   params.set("apiKey", key);
 
