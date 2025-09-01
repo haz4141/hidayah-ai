@@ -15,10 +15,10 @@ function searchCorpus(query: string) {
     .slice(0, 3)
     .map(({ c, v }) => `Qur'an ${c.englishName} ${v.num}: ${v.translation}`);
 
-  const ahadith = hadith.items
-    .filter((h) => h.text.includes(query) || h.translation.toLowerCase().includes(t))
+  const ahadith = hadith.hadiths
+    .filter((h) => h.arabic.includes(query) || h.translation.toLowerCase().includes(t))
     .slice(0, 3)
-    .map((h) => `Hadith (${h.source}): ${h.translation} [${h.grading}]`);
+    .map((h) => `Hadith (${h.collection}): ${h.translation} [${h.grading}]`);
 
   return { ayat, ahadith };
 }
