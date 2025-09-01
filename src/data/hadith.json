@@ -1,26 +1,234 @@
 {
-  "collection": "Sample",
-  "items": [
+  "collections": [
     {
-      "id": "s1",
-      "source": "Sahih Muslim (sample)",
-      "text": "إنما الأعمال بالنيات",
-      "translation": "Actions are but by intentions.",
-      "grading": "Sahih"
+      "name": "Sahih Bukhari",
+      "code": "bukhari",
+      "description": "The most authentic collection of hadith",
+      "total_hadiths": 7563
     },
     {
-      "id": "s2",
-      "source": "Sahih Bukhari (sample)",
-      "text": "الدين النصيحة",
-      "translation": "The religion is sincere advice.",
-      "grading": "Sahih"
+      "name": "Sahih Muslim", 
+      "code": "muslim",
+      "description": "Second most authentic collection",
+      "total_hadiths": 7563
     },
     {
-      "id": "s3",
-      "source": "Tirmidhi (sample)",
-      "text": "طلب العلم فريضة على كل مسلم",
+      "name": "Jami' at-Tirmidhi",
+      "code": "tirmidhi", 
+      "description": "Collection with detailed commentary",
+      "total_hadiths": 3956
+    },
+    {
+      "name": "Sunan an-Nasa'i",
+      "code": "nasai",
+      "description": "Collection focusing on legal hadiths",
+      "total_hadiths": 5662
+    },
+    {
+      "name": "Sunan Abu Dawud",
+      "code": "abudawud",
+      "description": "Collection of legal hadiths",
+      "total_hadiths": 5274
+    },
+    {
+      "name": "Sunan Ibn Majah",
+      "code": "ibnmajah",
+      "description": "Collection with additional hadiths",
+      "total_hadiths": 4341
+    }
+  ],
+  "hadiths": [
+    {
+      "id": "bukhari_1",
+      "collection": "bukhari",
+      "book": 1,
+      "hadith": 1,
+      "arabic": "إِنَّمَا الأَعْمَالُ بِالنِّيَّاتِ، وَإِنَّمَا لِكُلِّ امْرِئٍ مَا نَوَى، فَمَنْ كَانَتْ هِجْرَتُهُ إِلَى دُنْيَا يُصِيبُهَا أَوْ إِلَى امْرَأَةٍ يَنْكِحُهَا فَهِجْرَتُهُ إِلَى مَا هَاجَرَ إِلَيْهِ",
+      "translation": "Actions are but by intentions, and every man shall have only what he intended. Thus he whose migration was for Allah and His Messenger, his migration was for Allah and His Messenger; and he whose migration was to achieve some worldly benefit or to take some woman in marriage, his migration was for that for which he migrated.",
+      "narrator": "Umar ibn al-Khattab",
+      "grading": "Sahih",
+      "category": "Faith",
+      "keywords": ["intention", "actions", "migration", "purpose"]
+    },
+    {
+      "id": "muslim_1", 
+      "collection": "muslim",
+      "book": 1,
+      "hadith": 1,
+      "arabic": "مَنْ حَسَّنَ مِنْكُمْ إِسْلاَمَهُ فَإِنَّ كُلَّ حَسَنَةٍ يَعْمَلُهَا تُكْتَبُ لَهُ بِعَشْرِ أَمْثَالِهَا إِلَى سَبْعِمِائَةِ ضِعْفٍ، وَكُلَّ سَيِّئَةٍ يَعْمَلُهَا تُكْتَبُ لَهُ بِمِثْلِهَا",
+      "translation": "Whoever among you improves his Islam, then every good deed that he does will be written for him ten times to seven hundred times, and every evil deed that he does will be written for him as it is.",
+      "narrator": "Abu Huraira",
+      "grading": "Sahih",
+      "category": "Rewards",
+      "keywords": ["good deeds", "rewards", "multiplier", "sins"]
+    },
+    {
+      "id": "bukhari_2",
+      "collection": "bukhari", 
+      "book": 1,
+      "hadith": 2,
+      "arabic": "الدِّينُ النَّصِيحَةُ، قُلْنَا لِمَنْ قَالَ لِلَّهِ وَلِرَسُولِهِ وَلأَئِمَّةِ الْمُسْلِمِينَ وَعَامَّتِهِمْ",
+      "translation": "The religion is sincere advice. We said: To whom? He said: To Allah, His Book, His Messenger, the leaders of the Muslims and their common people.",
+      "narrator": "Tamim ad-Dari",
+      "grading": "Sahih",
+      "category": "Advice",
+      "keywords": ["religion", "advice", "sincerity", "leaders"]
+    },
+    {
+      "id": "tirmidhi_1",
+      "collection": "tirmidhi",
+      "book": 1, 
+      "hadith": 1,
+      "arabic": "طَلَبُ الْعِلْمِ فَرِيضَةٌ عَلَى كُلِّ مُسْلِمٍ",
       "translation": "Seeking knowledge is an obligation upon every Muslim.",
-      "grading": "Hasan"
+      "narrator": "Anas ibn Malik",
+      "grading": "Hasan",
+      "category": "Knowledge",
+      "keywords": ["knowledge", "obligation", "learning", "education"]
+    },
+    {
+      "id": "bukhari_3",
+      "collection": "bukhari",
+      "book": 1,
+      "hadith": 3,
+      "arabic": "بُنِيَ الإِسْلاَمُ عَلَى خَمْسٍ شَهَادَةِ أَنْ لاَ إِلَهَ إِلاَّ اللَّهُ وَأَنَّ مُحَمَّدًا رَسُولُ اللَّهِ، وَإِقَامِ الصَّلاَةِ، وَإِيتَاءِ الزَّكَاةِ، وَالْحَجِّ، وَصَوْمِ رَمَضَانَ",
+      "translation": "Islam is built upon five: the testimony that there is no god but Allah and that Muhammad is the Messenger of Allah, establishing prayer, giving zakah, performing Hajj, and fasting Ramadan.",
+      "narrator": "Abdullah ibn Umar",
+      "grading": "Sahih",
+      "category": "Pillars of Islam",
+      "keywords": ["pillars", "shahada", "prayer", "zakah", "hajj", "fasting"]
+    },
+    {
+      "id": "muslim_2",
+      "collection": "muslim",
+      "book": 1,
+      "hadith": 2,
+      "arabic": "لاَ يُؤْمِنُ أَحَدُكُمْ حَتَّى يُحِبَّ لأَخِيهِ مَا يُحِبُّ لِنَفْسِهِ",
+      "translation": "None of you truly believes until he loves for his brother what he loves for himself.",
+      "narrator": "Anas ibn Malik",
+      "grading": "Sahih",
+      "category": "Brotherhood",
+      "keywords": ["faith", "love", "brotherhood", "equality"]
+    },
+    {
+      "id": "bukhari_4",
+      "collection": "bukhari",
+      "book": 1,
+      "hadith": 4,
+      "arabic": "إِنَّ اللَّهَ لاَ يَنْظُرُ إِلَى صُوَرِكُمْ وَأَمْوَالِكُمْ وَلَكِنْ يَنْظُرُ إِلَى قُلُوبِكُمْ وَأَعْمَالِكُمْ",
+      "translation": "Allah does not look at your appearance or wealth, but He looks at your hearts and actions.",
+      "narrator": "Abu Huraira",
+      "grading": "Sahih",
+      "category": "Character",
+      "keywords": ["appearance", "wealth", "hearts", "actions", "judgment"]
+    },
+    {
+      "id": "nasai_1",
+      "collection": "nasai",
+      "book": 1,
+      "hadith": 1,
+      "arabic": "مَنْ سَلَكَ طَرِيقًا يَلْتَمِسُ فِيهِ عِلْمًا سَهَّلَ اللَّهُ لَهُ طَرِيقًا إِلَى الْجَنَّةِ",
+      "translation": "Whoever takes a path in search of knowledge, Allah will make easy for him a path to Paradise.",
+      "narrator": "Abu Huraira",
+      "grading": "Sahih",
+      "category": "Knowledge",
+      "keywords": ["knowledge", "path", "paradise", "ease"]
+    },
+    {
+      "id": "abudawud_1",
+      "collection": "abudawud",
+      "book": 1,
+      "hadith": 1,
+      "arabic": "الرَّاحِمُونَ يَرْحَمُهُمُ الرَّحْمَنُ، ارْحَمُوا مَنْ فِي الأَرْضِ يَرْحَمْكُمْ مَنْ فِي السَّمَاءِ",
+      "translation": "The merciful will be shown mercy by the Most Merciful. Be merciful to those on earth and the One above the heavens will have mercy upon you.",
+      "narrator": "Abdullah ibn Amr",
+      "grading": "Sahih",
+      "category": "Mercy",
+      "keywords": ["mercy", "compassion", "heaven", "earth"]
+    },
+    {
+      "id": "ibnmajah_1",
+      "collection": "ibnmajah",
+      "book": 1,
+      "hadith": 1,
+      "arabic": "إِنَّ اللَّهَ يُحِبُّ إِذَا عَمِلَ أَحَدُكُمْ عَمَلاً أَنْ يُتْقِنَهُ",
+      "translation": "Allah loves that when one of you does something, he does it with excellence.",
+      "narrator": "Aisha",
+      "grading": "Hasan",
+      "category": "Excellence",
+      "keywords": ["excellence", "perfection", "quality", "work"]
+    },
+    {
+      "id": "bukhari_5",
+      "collection": "bukhari",
+      "book": 1,
+      "hadith": 5,
+      "arabic": "إِنَّمَا أَنَا بَشَرٌ مِثْلُكُمْ أَنْسَى كَمَا تَنْسَوْنَ، فَإِذَا نَسِيتُ فَذَكِّرُونِي",
+      "translation": "I am only a human being like you. I forget as you forget, so when I forget, remind me.",
+      "narrator": "Abu Huraira",
+      "grading": "Sahih",
+      "category": "Human Nature",
+      "keywords": ["human", "forgetfulness", "reminder", "prophet"]
+    },
+    {
+      "id": "muslim_3",
+      "collection": "muslim",
+      "book": 1,
+      "hadith": 3,
+      "arabic": "مَنْ نَفَّسَ عَنْ مُؤْمِنٍ كُرْبَةً مِنْ كُرَبِ الدُّنْيَا نَفَّسَ اللَّهُ عَنْهُ كُرْبَةً مِنْ كُرَبِ يَوْمِ الْقِيَامَةِ",
+      "translation": "Whoever relieves a Muslim of a burden from the burdens of the world, Allah will relieve him of a burden from the burdens on the Day of Judgment.",
+      "narrator": "Abu Huraira",
+      "grading": "Sahih",
+      "category": "Helping Others",
+      "keywords": ["help", "burden", "relief", "judgment day"]
+    },
+    {
+      "id": "tirmidhi_2",
+      "collection": "tirmidhi",
+      "book": 1,
+      "hadith": 2,
+      "arabic": "الْحَيَاءُ مِنَ الإِيمَانِ",
+      "translation": "Modesty is part of faith.",
+      "narrator": "Umar ibn al-Khattab",
+      "grading": "Sahih",
+      "category": "Character",
+      "keywords": ["modesty", "faith", "character", "shame"]
+    },
+    {
+      "id": "nasai_2",
+      "collection": "nasai",
+      "book": 1,
+      "hadith": 2,
+      "arabic": "إِنَّ اللَّهَ جَمِيلٌ يُحِبُّ الْجَمَالَ",
+      "translation": "Allah is beautiful and He loves beauty.",
+      "narrator": "Abdullah ibn Mas'ud",
+      "grading": "Sahih",
+      "category": "Beauty",
+      "keywords": ["beauty", "allah", "love", "aesthetics"]
+    },
+    {
+      "id": "abudawud_2",
+      "collection": "abudawud",
+      "book": 1,
+      "hadith": 2,
+      "arabic": "إِنَّ اللَّهَ أَمَرَنِي بِالتَّوَاضُعِ فَلاَ يَفْخَرْ أَحَدٌ عَلَى أَحَدٍ",
+      "translation": "Allah has commanded me to be humble, so let no one boast over another.",
+      "narrator": "Iyad ibn Himar",
+      "grading": "Sahih",
+      "category": "Humility",
+      "keywords": ["humility", "boasting", "pride", "command"]
+    },
+    {
+      "id": "ibnmajah_2",
+      "collection": "ibnmajah",
+      "book": 1,
+      "hadith": 2,
+      "arabic": "إِنَّ اللَّهَ يُحِبُّ الْمُتَوَكِّلِينَ",
+      "translation": "Allah loves those who put their trust in Him.",
+      "narrator": "Umar ibn al-Khattab",
+      "grading": "Hasan",
+      "category": "Trust in Allah",
+      "keywords": ["trust", "allah", "love", "reliance"]
     }
   ]
 }
