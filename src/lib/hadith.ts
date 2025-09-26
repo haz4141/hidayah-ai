@@ -1,4 +1,5 @@
 import hadithData from "@/data/hadith.json";
+import hadithMalayData from "@/data/hadith-malay.json";
 
 export type Hadith = {
   id: string;
@@ -7,6 +8,7 @@ export type Hadith = {
   hadith: number;
   arabic: string;
   translation: string;
+  malay?: string;
   narrator: string;
   grading: string;
   category: string;
@@ -26,6 +28,7 @@ export type HadithFilters = {
   search?: string;
   grading?: string;
   narrator?: string;
+  language?: "english" | "malay";
 };
 
 export type HadithSearchResult = {
@@ -40,7 +43,9 @@ export type HadithSearchResult = {
  * Search hadiths with filters
  */
 export function searchHadiths(filters: HadithFilters, page: number = 1, limit: number = 20): HadithSearchResult {
-  let filteredHadiths = hadithData.hadiths as Hadith[];
+  // Choose dataset based on language preference
+  const dataset = filters.language === "malay" ? hadithMalayData : hadithData;
+  let filteredHadiths = dataset.hadiths as Hadith[];
   
   // Filter by collection
   if (filters.collection) {
@@ -64,12 +69,13 @@ export function searchHadiths(filters: HadithFilters, page: number = 1, limit: n
     );
   }
   
-  // Search in Arabic text, translation, and keywords
+  // Search in Arabic text, translation, malay translation, and keywords
   if (filters.search) {
     const searchLower = filters.search.toLowerCase();
     filteredHadiths = filteredHadiths.filter(h => 
       h.arabic.toLowerCase().includes(searchLower) ||
       h.translation.toLowerCase().includes(searchLower) ||
+      (h.malay && h.malay.toLowerCase().includes(searchLower)) ||
       h.keywords.some(keyword => keyword.toLowerCase().includes(searchLower)) ||
       h.narrator.toLowerCase().includes(searchLower)
     );
@@ -184,4 +190,44 @@ export function getGradingColor(grading: string): string {
   };
   
   return colors[grading] || "bg-gray-100 text-gray-800";
+}
+
+/**
+ * Get Malay collections
+ */
+export function getMalayCollections(): Collection[] {
+  return hadithMalayData.collections as Collection[];
+}
+
+/**
+ * Get Malay categories
+ */
+export function getMalayCategories(): string[] {
+  const hadiths = hadithMalayData.hadiths as Hadith[];
+  const categories = new Set(hadiths.map(h => h.category));
+  return Array.from(categories).sort();
+}
+
+/**
+ * Get random Malay hadith
+ */
+export function getRandomMalayHadith(): Hadith {
+  const hadiths = hadithMalayData.hadiths as Hadith[];
+  const randomIndex = Math.floor(Math.random() * hadiths.length);
+  return hadiths[randomIndex];
+}
+
+/**
+ * Get Malay translation for a hadith
+ */
+export function getMalayTranslation(hadithId: string): string | undefined {
+  const hadith = hadithMalayData.hadiths.find(h => h.id === hadithId) as Hadith;
+  return hadith?.malay;
+}
+
+/**
+ * Search in Malay hadiths specifically
+ */
+export function searchMalayHadiths(filters: Omit<HadithFilters, 'language'>, page: number = 1, limit: number = 20): HadithSearchResult {
+  return searchHadiths({ ...filters, language: "malay" }, page, limit);
 }

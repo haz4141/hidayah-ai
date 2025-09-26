@@ -22,6 +22,7 @@ export default function Home() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           <FeatureCard title="Qur'an Reader" href="/quran" emoji="📖" desc="Uthmani script, tafsir, translations, audio, bookmarks" />
           <FeatureCard title="Hadith Insights" href="/hadith" emoji="📜" desc="Search, source verification, AI summaries" />
+          <FeatureCard title="Hadith Bahasa Melayu" href="/hadith/malay" emoji="🇲🇾" desc="Hadith dengan terjemahan Bahasa Melayu" />
           <FeatureCard title="AI Chatbot" href="/chat" emoji="🤖" desc="Ask Islamic questions; includes disclaimers" />
           <FeatureCard title="Recitation Feedback" href="/recite" emoji="🎙️" desc="AI listens and corrects tajweed & pronunciation" />
           <FeatureCard title="Profile" href="/profile" emoji="👤" desc="History, streaks, bookmarks, progress" />

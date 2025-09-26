@@ -40,6 +40,7 @@ const NARRATORS = getNarrators();
 
 export default function HadithPage() {
   const [dataSource, setDataSource] = useState<"local" | "external">("local");
+  const [language, setLanguage] = useState<"english" | "malay">("english");
   const [book, setBook] = useState<string>(BOOKS[0].value);
   const [localCollection, setLocalCollection] = useState<string>(LOCAL_COLLECTIONS[0].value);
   const [category, setCategory] = useState<string>("");
@@ -71,7 +72,8 @@ export default function HadithPage() {
           if (narrator) searchParams.set("narrator", narrator);
           if (q.trim()) searchParams.set("search", q.trim());
           
-          const res = await fetch(`/api/hadith/local?${searchParams.toString()}`);
+          const endpoint = language === "malay" ? "/api/hadith/malay" : "/api/hadith/local";
+          const res = await fetch(`${endpoint}?${searchParams.toString()}`);
           const data = await res.json();
           
                      if (data.success) {
@@ -121,7 +123,7 @@ export default function HadithPage() {
       }
     }
     load();
-  }, [dataSource, book, localCollection, category, grading, narrator, paginate, q, page]);
+  }, [dataSource, language, book, localCollection, category, grading, narrator, paginate, q, page]);
 
   const results = useMemo(() => {
     const t = q.trim().toLowerCase();
@@ -136,31 +138,61 @@ export default function HadithPage() {
       <h1 className="text-2xl font-semibold">Hadith Insights</h1>
       <p className="text-black/70 mt-1">Browse authentic hadiths from major collections with local and external sources.</p>
 
-      {/* Data Source Toggle */}
-      <div className="mt-6 flex items-center gap-4">
-        <label className="text-sm font-medium">Data Source:</label>
-        <div className="flex rounded-lg border border-black/20 p-1">
-          <button
-            onClick={() => setDataSource("local")}
-            className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-              dataSource === "local" 
-                ? "bg-brand text-white" 
-                : "text-black/60 hover:text-black/80"
-            }`}
-          >
-            Local Dataset
-          </button>
-          <button
-            onClick={() => setDataSource("external")}
-            className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-              dataSource === "external" 
-                ? "bg-brand text-white" 
-                : "text-black/60 hover:text-black/80"
-            }`}
-          >
-            External API
-          </button>
+      {/* Data Source and Language Toggle */}
+      <div className="mt-6 flex items-center gap-6">
+        <div className="flex items-center gap-4">
+          <label className="text-sm font-medium">Data Source:</label>
+          <div className="flex rounded-lg border border-black/20 p-1">
+            <button
+              onClick={() => setDataSource("local")}
+              className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                dataSource === "local" 
+                  ? "bg-brand text-white" 
+                  : "text-black/60 hover:text-black/80"
+              }`}
+            >
+              Local Dataset
+            </button>
+            <button
+              onClick={() => setDataSource("external")}
+              className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                dataSource === "external" 
+                  ? "bg-brand text-white" 
+                  : "text-black/60 hover:text-black/80"
+              }`}
+            >
+              External API
+            </button>
+          </div>
         </div>
+
+        {dataSource === "local" && (
+          <div className="flex items-center gap-4">
+            <label className="text-sm font-medium">Language:</label>
+            <div className="flex rounded-lg border border-black/20 p-1">
+              <button
+                onClick={() => setLanguage("english")}
+                className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                  language === "english" 
+                    ? "bg-brand text-white" 
+                    : "text-black/60 hover:text-black/80"
+                }`}
+              >
+                English
+              </button>
+              <button
+                onClick={() => setLanguage("malay")}
+                className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                  language === "malay" 
+                    ? "bg-brand text-white" 
+                    : "text-black/60 hover:text-black/80"
+                }`}
+              >
+                Bahasa Melayu
+              </button>
+            </div>
+          </div>
+        )}
       </div>
 
              {/* Filters */}
@@ -248,16 +280,18 @@ export default function HadithPage() {
              {/* Results */}
        <div className="mt-6 space-y-4">
          {dataSource === "local" ? (
-           localHadiths.map((hadith) => (
-             <HadithCard
-               key={hadith.id}
-               hadith={hadith}
-               onBookmark={(hadithId) => {
-                 console.log("Bookmark:", hadithId);
-                 // Add bookmark functionality here
-               }}
-             />
-           ))
+            localHadiths.map((hadith) => (
+              <HadithCard
+                key={hadith.id}
+                hadith={hadith}
+                language={language}
+                showMalay={language === "english"}
+                onBookmark={(hadithId) => {
+                  console.log("Bookmark:", hadithId);
+                  // Add bookmark functionality here
+                }}
+              />
+            ))
          ) : (
            results.map((h) => (
              <div key={h.key} className="rounded-lg border border-black/10 p-6 bg-white shadow-sm">

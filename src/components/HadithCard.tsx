@@ -5,13 +5,17 @@ interface HadithCardProps {
   onBookmark?: (hadithId: string) => void;
   isBookmarked?: boolean;
   showMetadata?: boolean;
+  showMalay?: boolean;
+  language?: "english" | "malay";
 }
 
 export default function HadithCard({ 
   hadith, 
   onBookmark, 
   isBookmarked = false,
-  showMetadata = true 
+  showMetadata = true,
+  showMalay = false,
+  language = "english"
 }: HadithCardProps) {
   return (
     <div className="rounded-lg border border-black/10 p-6 bg-white shadow-sm hadith-card">
@@ -23,7 +27,20 @@ export default function HadithCard({
           </div>
           
           {/* Translation */}
-          <p className="text-sm text-black/70 leading-relaxed mb-4">{hadith.translation}</p>
+          <div className="mb-4 space-y-2">
+            {language === "malay" && hadith.malay ? (
+              <p className="text-sm text-black/70 leading-relaxed">{hadith.malay}</p>
+            ) : (
+              <p className="text-sm text-black/70 leading-relaxed">{hadith.translation}</p>
+            )}
+            
+            {showMalay && hadith.malay && language === "english" && (
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+                <p className="text-xs font-medium text-blue-900 mb-1">Terjemahan Bahasa Melayu:</p>
+                <p className="text-sm text-blue-800 leading-relaxed">{hadith.malay}</p>
+              </div>
+            )}
+          </div>
           
           {/* Metadata Tags */}
           {showMetadata && (
